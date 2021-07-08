@@ -1,0 +1,42 @@
+[
+  {
+    "description": "Laptop",
+    "assetTagID": "112233",
+    "purchasedFrom": "998877",
+    "purchaseDate": "112233",
+    "brand": "HP",
+    "cost": "656555",
+    "model": "G5",
+    "serialNo": "786512"
+  },
+  {
+    "description": "description",
+    "assetTagID": "assetTagID",
+    "purchasedFrom": "purchasedFrom",
+    "purchaseDate": "purchaseDate",
+    "brand": "brand",
+    "cost": "cost",
+    "model": "model",
+    "serialNo": "serialNo"
+  },
+  {
+    "description": "Umar",
+    "assetTagID": "Dona",
+    "purchasedFrom": "Prince",
+    "purchaseDate": "Tue Jun 29 2021",
+    "brand": "Peral",
+    "cost": "Infinite",
+    "model": "1985",
+    "serialNo": "1234"
+  },
+  {
+    "description": "Car",
+    "assetTagID": "2021",
+    "purchasedFrom": "Sialkot",
+    "purchaseDate": "Tue Jun 29 2021",
+    "brand": "Prince",
+    "cost": "1200000",
+    "model": "Peral",
+    "serialNo": "ADH 659"
+  }
+]
