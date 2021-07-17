@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
 import { useTable } from 'react-table'
-import MOCK_DATA1 from "../components/MOCK_DATA1.json";
+import MOCK_DATA from "../components/MOCK_DATA.json";
 import { COLUMNS } from "../components/columns";
 
 
 
 export default function BasicTable ()  {
     const columns = useMemo(() => COLUMNS, [])
-    const data = useMemo(() => MOCK_DATA1, [])
+    const data = useMemo(() => MOCK_DATA, [])
   
     const {
       getTableProps,

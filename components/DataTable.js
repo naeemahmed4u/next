@@ -3,12 +3,35 @@ import { useTable } from 'react-table';
 import { COLUMNS } from "../components/columns";
 
 
-function DataTable(...props) {
+function DataTable({atb, ...props}) {
 
-    console.log(props);
+    // console.log(atb);
+
+    // const onRowClick = (state, rowInfo, column, instance, row) => {
+    //             // console.log('A Td Element was clicked!')
+    //             // console.log('it produced this event:')
+    //             // console.log('It was in this column:', column)
+    //             // console.log('It was in this row:', rowInfo)
+    //             // console.log('It was in this table instance:', instance)
+    //             console.log(row)
+    //     return {
+    //         onClick: e => {
+    //             console.log('A Td Element was clicked!')
+    //             console.log('it produced this event:', e)
+    //             console.log('It was in this column:', column)
+    //             console.log('It was in this row:', rowInfo)
+    //             console.log('It was in this table instance:', instance)
+                
+    //         }
+    //     }
+    // }
+
+    const getCellValue = (cell) =>{  
+        console.log(cell.value)
+      }
     
     const cols = useMemo(() => COLUMNS, [])
-    const data1 = useMemo(() => props, [])
+    const data1 = useMemo(() => atb)
 
     const {
         getTableProps,
@@ -38,9 +61,9 @@ function DataTable(...props) {
                     {rows.map(row => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr {...row.getRowProps({onClick: e => props.onRowClicked && props.onRowClicked(row, e),})}>
                                 {row.cells.map(cell => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    return <td {...cell.getCellProps()} onClick={()=> getCellValue(cell)}>{cell.render('Cell')}</td>
                                 })}
                             </tr>
                         )

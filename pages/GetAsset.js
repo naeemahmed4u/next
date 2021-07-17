@@ -1,94 +1,47 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import DataTable from '../components/DataTable';
 
 
-// import { useTable } from 'react-table';
-//import MOCK_DATA from "../components/MOCK_DATA.json";
-// import { COLUMNS } from "../components/columns";
-
-
-
 function GetAsset() {
 
-  const { loading, data: { getAssets = [] } = {} } = useQuery(FETCH_ASSET_QUERY);
+  // const { loading,error, data: { getAssets = [] } = {}  } = useQuery(FETCH_ASSET_QUERY);
+  const { data: { getAssets = [] } = {} } = useQuery(FETCH_ASSET_QUERY);
 
-  // useEffect(() => {
+  // if (loading) return 'Loading...';
+  // if (error) return `Error! ${error.message}`;
 
-  //   console.log(getAssets);
-
-
-  // }, [getAssets])
-  console.log(getAssets)
-
-  // const cols = useMemo(() => COLUMNS, [])
-  // const data1 = useMemo(() => getAssets, [])
-
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   footerGroups,
-  //   rows,
-  //   prepareRow
-  // } = useTable({
-  //   columns: cols,
-  //   data: data1
-  // });
-
+//   const onRowClick = (state, rowInfo, column, instance) => {
+//     return {
+//         onClick: e => {
+//             console.log('A Td Element was clicked!')
+//             console.log('it produced this event:', e)
+//             console.log('It was in this column:', column)
+//             console.log('It was in this row:', rowInfo)
+//             console.log('It was in this table instance:', instance)
+//         }
+//     }
+// }
 
   return (
     <>
       <DataTable atb={getAssets} />
       {/* <table>
-  <tbody>
-    {getAssets.map((item,index)=>(
-      <tr key={index}>
-        <td>
-          {item.description}
-          {item.brand}
-          {item.cost}
-          {item.model}
+        <tbody>
+          {getAssets.map((item, index) => (
+            <tr key={index}>
+              <td>
+                {item.description}
+                {item.brand}
+                {item.cost}
+                {item.model}
 
 
-        </td>
-      </tr>
-    ))}
-    </tbody>
-    </table> */}
-
-      {/* <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
+              </td>
             </tr>
           ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
-              </tr>
-            )
-          })}
         </tbody>
-        <tfoot>
-          {footerGroups.map(footerGroup => (
-            <tr {...footerGroup.getFooterGroupProps()}>
-              {footerGroup.headers.map(column => (
-                <td {...column.getFooterProps()}>{column.render('Footer')}</td>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </table> */}
     </>
   )

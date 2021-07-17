@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import styled from "styled-components";
+// import styled from "styled-components";
 
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { SideBarData } from "./SideBarData";
-import { IconContext } from "react-icons/lib";
+// import { IconContext } from "react-icons/lib";
 import SubMenu from "./SubMenu";
-import Sidebar from "./Sidebar";
+// import Sidebar from "./Sidebar";
 
 export default function NavBar() {
   const [sidebar, setSidebar] = useState(false);
@@ -60,9 +60,9 @@ export default function NavBar() {
           </li>
           {SideBarData.map((item, index) => {
             return (
-              <ul>
+              <ul key={index}>
               <li className={item.cName}>
-                <SubMenu item={item} key={index} />
+                <SubMenu item={item}  />
               </li>
               </ul>
               //   <li key={index} className={item.cName}>

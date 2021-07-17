@@ -1,6 +1,7 @@
 const { model, Schema } = require('mongoose');
 
 const assetSchema = new Schema({
+    picture:String,
     description: String,
     assetTagID: String,
     purchasedFrom: String,

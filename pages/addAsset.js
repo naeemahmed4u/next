@@ -1,18 +1,26 @@
-import { Formik, Form } from "formik";
+import { Formik, Form} from "formik";
 import { TextField } from "../components/TextField";
 import { useMutation } from "@apollo/react-hooks";
 import * as Yup from "yup";
 import gql from "graphql-tag";
 import DatePicker from "../components/DatePicker";
 import styles from '../styles/Home.module.scss'
+import Dropzone from '../components/Dropzone';
+//  import {Form, DropZone} from 'react-formik-ui';
+
 
 
 export default function AddAsset() {
   const [addAsset] = useMutation(ADD_ASSET);
+  // function setFieldValue(){
+    
+  // }
 
   return (
-    <Formik
+    
+    <Formik 
       initialValues={{
+        picture: [],
         description: "",
         assetTagID: "",
         purchasedFrom: "",
@@ -22,7 +30,7 @@ export default function AddAsset() {
         model: "",
         serialNo: "",
       }}
-      validationSchema={Yup.object({
+      validationSchema={Yup.object({        
         description: Yup.string()
           .max(15, "Must be 15 charaters or less")
           .required("Required"),
@@ -48,11 +56,16 @@ export default function AddAsset() {
           .max(20, "Must be 20 charaters or less")
           .required("Required"),
       })}
+      
+      
       onSubmit={(values) => {
-        const { description,assetTagID,purchasedFrom,purchaseDate,brand,cost,model,serialNo } = values;
+        const {picture, description,assetTagID,purchasedFrom,purchaseDate,brand,cost,model,serialNo } = values;
+        // picture=files;
+        //setFieldValue ((val) => {val.setFieldValue("picture", val)})
 
         addAsset({
           variables: {
+            picture,
             description,
             assetTagID,
             purchasedFrom,
@@ -63,12 +76,13 @@ export default function AddAsset() {
             serialNo,
           },
         });
-
-        console.log(description, assetTagID, purchasedFrom, purchaseDate, brand, cost, model, serialNo);
+        
+        console.log(values);
       }}
     >
+      {(formik)=>(
       <Form className={styles.card}>
-        <TextField
+          <TextField
           label="Description"
           name="description"
           type="text"
@@ -81,19 +95,26 @@ export default function AddAsset() {
         <TextField label="Cost" name="cost" type="text" />
         <TextField label="Model" name="model" type="text" />
         <TextField label="Serial No." name="serialNo" type="text" />
+        <input name="picture" type="file" onChange={(event)=>formik.setFieldValue("picture",event.target.files[0])}  />
+
+        {/* <Dropzone name="picture" type="file" onChange = {(event) =>formik.setFieldValue("picture", event.target.files[0]) } /> */}
+
+        {/* <DropZone name="picture" label="Asset Image"/>         */}
+        
         <button className="btn btn-dark mt-3" type="submit">
           Submit
         </button>
         <button className="btn btn-danger mt-3 ml-3" type="reset">
           Cancel
         </button>
-      </Form>
+      </Form>)}
     </Formik>
   );
 }
 
 const ADD_ASSET = gql`
   mutation addAsset(
+    $picture:String
     $description: String!
     $assetTagID: String!
     $purchasedFrom: String!
@@ -105,6 +126,7 @@ const ADD_ASSET = gql`
   ) {
     addAsset(
       assetInput: {
+        picture:$picture
         description: $description
         assetTagID: $assetTagID
         purchasedFrom: $purchasedFrom
@@ -116,6 +138,7 @@ const ADD_ASSET = gql`
       }
     ) {
       id
+      picture
       description
       assetTagID
       purchasedFrom
