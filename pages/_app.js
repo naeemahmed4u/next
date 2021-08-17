@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { createUploadLink } from 'apollo-upload-client';
-import { ApolloLink } from '@apollo/client';
+//import { ApolloLink } from '@apollo/client';
 
 
 
@@ -21,21 +21,17 @@ function MyApp({ Component, pageProps }) {
   // })
 
   const client = new ApolloClient({
-    // link: ApolloLink.from([ httpLink, uploadLink ]),
+   // link: ApolloLink.from([ httpLink, uploadLink ]),
     link: uploadLink,
     cache: new InMemoryCache(),
   });
 
   return (
-
-
     <ApolloProvider client={client}>
       <Layout>
         <Component {...pageProps} />
       </Layout>
     </ApolloProvider>
-
-
   )
 }
 

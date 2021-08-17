@@ -9,7 +9,11 @@ const assetSchema = new Schema({
     brand: String,
     cost: String,
     model: String,
-    serialNo: String
+    serialNo: String,
+    site:String,
+    category:String,
+    location:String,
+    department:String
 });
 
 module.exports = model('Asset', assetSchema);

@@ -49,6 +49,7 @@ function GetAsset() {
 const FETCH_ASSET_QUERY = gql`
  {
     getAssets {
+      picture
      description
     assetTagID
     purchasedFrom
@@ -56,7 +57,7 @@ const FETCH_ASSET_QUERY = gql`
     brand
     cost
     model
-    serialNo 
+    serialNo     
     }
   }
 `;

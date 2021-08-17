@@ -12,7 +12,7 @@ const {GraphQLUpload,graphqlUploadExpress} = require('graphql-upload');
 const {finished} =require('stream/promises');
 
 const { ApolloServer, gql } = require("apollo-server-express");
-const { createWriteStream, existsSync, mkdirSync } = require("fs");
+//const { createWriteStream, existsSync, mkdirSync } = require("fs");
 const path = require("path");
 const express = require("express");
 
