@@ -9,7 +9,7 @@ const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const { MONGODB } = require('./config.js');
 const {GraphQLUpload,graphqlUploadExpress} = require('graphql-upload');
-const {finished} =require('stream/promises');
+//const {finished} =require('stream/promises');
 
 const { ApolloServer, gql } = require("apollo-server-express");
 //const { createWriteStream, existsSync, mkdirSync } = require("fs");
@@ -44,7 +44,8 @@ async function startApolloServer() {
   const app = express()
 
 app.use(graphqlUploadExpress());
-//app.use("/images", express.static(path.join(__dirname, "../images")));
+// app.use("/images", express.static(path.join(__dirname, "../images")));
+app.use("/images", express.static("images"));
 // // app.use(cors())
 server.applyMiddleware({ app });
 

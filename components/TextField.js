@@ -9,7 +9,7 @@ export const TextField = ({value, label, ...props}) => {
             <input 
                 className={`form-control shadow-none ${meta.touched && meta.error && 'is-invalid'}`}
                 {...field} {...props}
-                autoComplete="off" value={value}
+                autoComplete="off" value={value} name={field.name}
             />
             <ErrorMessage component="div" name={field.name} className='error'/>
         </div>

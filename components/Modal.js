@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState  } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import AddAsset from "../pages/AddAsset";
+
+
+
+
+const ModalContext=React.createContext();
 
 const Modal = ({ show, onClose, children, title }) => {
   const [isBrowser, setIsBrowser] = useState(false);
@@ -11,11 +15,14 @@ const Modal = ({ show, onClose, children, title }) => {
   }, []);
 
   const handleCloseClick = (e) => {
-    e.preventDefault();    
+    //e.preventDefault();    
     onClose();    
   };
 
+
   const modalContent = show ? (
+  <ModalContext.Provider value={handleCloseClick}>
+
     <StyledModalOverlay>
       <StyledModal>
         <StyledModalHeader>
@@ -24,9 +31,11 @@ const Modal = ({ show, onClose, children, title }) => {
           </a>
         </StyledModalHeader>
         {title && <StyledModalTitle>{title}</StyledModalTitle>}
-        <StyledModalBody>{children}</StyledModalBody>
+        <StyledModalBody>{children}</StyledModalBody>        
       </StyledModal>
     </StyledModalOverlay>
+    </ModalContext.Provider>
+
   ) : null;
 
   if (isBrowser) {
@@ -52,9 +61,10 @@ const StyledModalHeader = styled.div`
 const StyledModal = styled.div`
   background: white;
   width: 500px;
-  height: 600px;
-  border-radius: 15px;
-  padding: 15px;
+  height: auto;
+  border-radius: 1px;
+  padding: 15px;  
+
 `;
 const StyledModalOverlay = styled.div`
   position: absolute;
@@ -69,3 +79,4 @@ const StyledModalOverlay = styled.div`
 `;
 
 export default Modal;
+export { ModalContext };

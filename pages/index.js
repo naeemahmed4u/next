@@ -27,7 +27,7 @@ export default function Home() {
     {/* <GetAsset/>   */}
       {/* <BasicTable/> */}
       {/* <Sidebar/> */}
-      <AddAsset/>
+      {/* <AddAsset/> */}
      {/* <Site/> */}
      {/* <Category/> */}
      {/* <Modal/>
@@ -38,18 +38,3 @@ export default function Home() {
     </>
   )
 }
-// export default function Home() {
-//   const [showModal, setShowModal] = useState(false);
-
-//   return (
-//     <div>
-//         <button onClick={() => setShowModal(true)}>Open Modal</button>
-//         <Modal
-//           onClose={() => setShowModal(false)}
-//           show={showModal}
-//         >
-//           Hello from the modal!
-//         </Modal>
-//     </div>
-//   )
-// }

@@ -1,55 +1,64 @@
 import React from 'react'
 import styles from '../styles/Card.module.css'
-import Tilt from 'react-vanilla-tilt'
+
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+//import Tilt from 'react-vanilla-tilt'
 
 export default function Card() {
+  const { data: { getAssets = [] } = {} } = useQuery(FETCH_ASSET_QUERY);
+  const {cost} = getAssets;
+//   console.log(cost);
+
     return (
         <>
-            <Tilt>
-                <div className={styles.container}>
-                    <div className={styles.card}>
-                        <div className="content">
-                            <h2>
-                                Hello</h2>
-                            <h3>                 Hello World</h3>
-                            <p>Welcome to Sabri Solutions</p>
-                        </div>
-                    </div>
-                </div>
-            </Tilt>
             <div div className={styles.container}>
                 <div className={styles.card}>
                     <div className="content">
-                        <h2>
-                            Hello</h2>
-                        <h3>                 Hello World</h3>
+                        <h5>Number of Active Assets</h5>
+                        <h3>{getAssets.length}</h3>
                         <p>Welcome to Sabri Solutions</p>
                     </div>
                 </div>
                 <div className={styles.card}>
                     <div className="content">
-                        <h2>
-                            Hello</h2>
-                        <h3>                 Hello World</h3>
+                        <h5>NAV: Net Asset Value</h5>
+                        <h3>Hello World</h3>
                         <p>Welcome to Sabri Solutions</p>
                     </div>
                 </div>
                 <div className={styles.card}>
                     <div className="content">
-                        <h2>
-                            Hello</h2>
-                        <h3>                 Hello World</h3>
+                        <h5>Value of Assets</h5>
+                        <h3>Hello World</h3>
                         <p>Welcome to Sabri Solutions</p>
                     </div>
                 </div>
-
-
+                <div className={styles.card}>
+                    <div className="content">
+                        <h5>Purchase in Fiscal Year</h5>
+                        <h3>Hello World</h3>
+                        <p>Welcome to Sabri Solutions</p>
+                    </div>
+                </div>
             </div>
-
-
-
-
 
         </>
     )
 }
+
+const FETCH_ASSET_QUERY = gql`
+ {
+    getAssets {
+      picture
+     description
+    assetTagID
+    purchasedFrom
+    purchaseDate
+    brand
+    cost
+    model
+    serialNo     
+    }
+  }
+`;

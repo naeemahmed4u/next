@@ -3,10 +3,12 @@ import { TextField } from "../components/TextField";
 import { useMutation } from "@apollo/react-hooks";
 import * as Yup from "yup";
 import gql from "graphql-tag";
+import { ModalContext } from "../components/Modal";
+import React, { useContext } from "react";
 
 
 export default function Site() {
-
+    const closeModal = useContext(ModalContext);
     const [addSite] = useMutation(ADD_SITE);
 
 
@@ -42,6 +44,8 @@ export default function Site() {
                         site, description, address, city, province, postalCode, country
                     },
                 });
+                closeModal();
+
             }}
         >
             {() => (
@@ -50,10 +54,10 @@ export default function Site() {
 
                     <TextField label="Description" name="description" type="text" />
                     <TextField label="Address" name="address" type="text" />
-                    <TextField label="City" name="city" type="text" />                    
+                    <TextField label="City" name="city" type="text" />
                     <TextField label="Province" name="province" type="text" />
                     <TextField label="Postal Code" name="postalCode" type="text" />
-                    <TextField label="Country" name="country" type="text" />                    
+                    <TextField label="Country" name="country" type="text" />
                     <button className="btn btn-dark mt-3" type="submit" >
                         Submit
                     </button>

@@ -1,30 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { useRouter } from 'next/router'
 import { Field, Formik, Form, useFormikContext } from "formik";
 import { TextField } from "../components/TextField";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import * as Yup from "yup";
 import gql from "graphql-tag";
-import AddAsset from "../pages/AddAsset";
+import { ModalContext } from "../components/Modal";
+
+
 
 
 export default function Location() {
-
+  const closeModal = useContext(ModalContext);
+  
+  const router = useRouter();
   const [addLocation] = useMutation(ADD_LOCATION);
   const { data: { getSites = [] } = {} } = useQuery(GET_SITES_QUERY);
-
-
-
-  // const [showAsset, setShowAsset] = useState(false);
-  
-  
-
-  // const {
-  //   data: { getSite= [] } = {} }
-  //  = useQuery(FETCH_SITE_QUERY, {
-  //   variables: {
-  //     siteId
-  //   }
-  // });
 
   return (
 
@@ -47,10 +38,22 @@ export default function Location() {
         addLocation({
           variables: { name, location },
         });
-       
+        closeModal();
       }}
     >
-      {() => (
+      {(props) => {
+      const {
+        values,
+        touched,
+        errors,
+        dirty,
+        isSubmitting,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        handleReset
+      } = props;
+      return(
         <Form >
           <Field as="select" label="Site *" name="name" >
             <option value="Select Site">Select Site</option>
@@ -59,13 +62,16 @@ export default function Location() {
             )}
           </Field>
           <TextField label="Location *" name="location" type="text" />
-          <button className="btn btn-dark mt-3" type="submit" >
+          
+          
+          <button className="btn btn-dark mt-3" type="submit"  >
             Submit
           </button>
-          <button className="btn btn-danger mt-3 ml-3" type="reset">
+          <button className="btn btn-danger mt-3 ml-3" type="reset" onClick={handleReset}>
             Cancel
           </button>
-        </Form>)}
+              
+        </Form>)}}
     </Formik>
 
 
@@ -90,11 +96,13 @@ export default function Location() {
 // `;
 
 const ADD_LOCATION = gql`
-  mutation addLocation($name:String,
+  mutation addLocation(
+    $name:String,
     $location:String    
   ) {
     addLocation(
-      locationInput:{name:$name,
+      locationInput:{
+        name:$name,
         location:$location      
       }
     ) {

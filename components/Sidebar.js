@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import { SidebarData } from "./SideBarData1";
+import { SidebarData } from "./SidebarData1";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 
@@ -67,7 +67,8 @@ const Sidebar = () => {
           </SidebarWrap>
         </SidebarNav>
       </IconContext.Provider>
-    </>
+      </>
+    
   );
 };
 

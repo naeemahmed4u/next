@@ -61,7 +61,8 @@ function DataTable({atb, ...props}) {
                     {rows.map(row => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps({onClick: e => props.onRowClicked && props.onRowClicked(row, e),})}>
+                            // <tr {...row.getRowProps({onClick: e => props.onRowClicked && props.onRowClicked(row, e),})}>
+                            <tr {...row.getRowProps()} onClick={() => console.log(row.original)}>
                                 {row.cells.map(cell => {
                                     return <td {...cell.getCellProps()} onClick={()=> getCellValue(cell)}>{cell.render('Cell')}</td>
                                 })}

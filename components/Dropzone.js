@@ -1,13 +1,13 @@
-import React, {useEffect, useState, createContext} from 'react';
-import {useDropzone} from 'react-dropzone';
+import React, { useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { useField } from 'formik';
 import { filesQuery } from '../pages/Files';
-import AddAsset from '../pages/AddAsset';
 
 
-const HANDLE_UPLOAD=createContext();
+
+// const HANDLE_UPLOAD = React.createContext();
 
 
 const thumbsContainer = {
@@ -41,16 +41,6 @@ const img = {
   height: '100%'
 };
 
-// const onDrop = useCallback(
-//     acceptedFiles => {
-//       let productImage = acceptedFiles[0];
-//       props.setFieldValue("picture", productImage);
-//     },
-//     // [props]
-//   );
-
-
-
 
 const uploadFileMutation = gql`
   mutation UploadFile($file: Upload!) {
@@ -62,53 +52,44 @@ const uploadFileMutation = gql`
 `;
 
 
-export default function Previews({value, name, pathValue, props}) {
+export default function Previews({ value, name, pathValue, props }) {
   const [mutate, { loading, error }] = useMutation(uploadFileMutation);
   const [_, __, helpers] = useField(name);
-  
+
 
   const [file, setFiles] = useState([]);
-  
-  
 
-  
-  const handleUpload = async () => {
+
+
+  // const handleUpload = async () => {
+
+  const handleUpload =  () => {
     if (file) {
       mutate({
         variables: { file },
         //  refetchQueries: [{ query: filesQuery, variables: file }], // update the store after a successful upload.         
       });
-      setFiles({}); // reset state after a successful upload      
+      // setFiles({}); // reset state after a successful upload      
       console.log('Uploaded successfully: ', file);
       const path = file.path;
-       pathValue(path);
-       value=path;
+      pathValue(file);
+      value = path;
+      console.log(file);
       // console.log(value);
       helpers.setValue(value);
       helpers.setTouched(true);
-     // window.sessionStorage('imgpath', path);      
-    //  console.log(pathValue);
-    //  localStorage.setItem("eee", file.path)
+      // window.sessionStorage('imgpath', path);      
+      //  console.log(pathValue);
+      //  localStorage.setItem("eee", file.path)
 
-    } else {
-      console.log('No files to upload');
-    }
+     } 
+     //else {
+    //   console.log('No files to upload');
+    // }
   };
 
 
-  // const onDrop = useCallback(
-  //       ([file]) => {
-  //         mutate({ variables: { file } });
-  //       },
-  //       [mutate],
-  //       // acceptedFiles => {
-  //       //     setFiles(acceptedFiles.map(file => Object.assign(file, {
-  //       //       preview: URL.createObjectURL(file)
-  //       //     })));
-  //       //   }
-  //     );
-
-
+  
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFile) => {
@@ -117,10 +98,12 @@ export default function Previews({value, name, pathValue, props}) {
         Object.assign(acceptedFile[0], {
           preview: URL.createObjectURL(acceptedFile[0]),
         }),
-      );     
+      );
+      // handleUpload();
+
     },
   });
-  
+
   const thumbs = (
     <div className='thumb' key={file.name}>
       <div className='thumb-inner'>
@@ -139,34 +122,31 @@ export default function Previews({value, name, pathValue, props}) {
   );
 
   return (
-    
-  <>
-  <HANDLE_UPLOAD.Provider value={handleUpload}>    
+    <>
+       {/* <HANDLE_UPLOAD.Provider value={file}> */}
 
-<h1>{file.path}</h1>
-    <section  className="container">
-      <div  {...getRootProps({className: 'dropzone'})}>
-        <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
-      <aside style={thumbsContainer}>
-        {thumbs}        
-        
-        <button
-          type='submit'
+        {/* <h1>{file.path}</h1> */}
+        <section className="container">
+          <div  {...getRootProps({ className: 'dropzone' })}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop some files here, or click to select files</p>            
+          </div>
+          <aside style={thumbsContainer}>
+            {thumbs}
+            
+          <button
+          type='button'
           className={`button`}
           style={{ display: file && !Object.keys(file).length && 'none' }}
           onClick={handleUpload}
         >
           Upload
         </button>
-      </aside>      
-    </section>   
-    </HANDLE_UPLOAD.Provider>
-
+          </aside>
+        </section>
+       {/* </HANDLE_UPLOAD.Provider> */}
     </>
-    
   );
 }
 
-export {HANDLE_UPLOAD};
+// export { HANDLE_UPLOAD };

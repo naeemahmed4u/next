@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 // import styled from "styled-components";
 
@@ -8,11 +8,17 @@ import { SideBarData } from "./SideBarData";
 // import { IconContext } from "react-icons/lib";
 import SubMenu from "./SubMenu";
 // import Sidebar from "./Sidebar";
+import { AuthContext } from '../context/auth';
+
 
 export default function NavBar() {
   const [sidebar, setSidebar] = useState(false);
+  const { user } = useContext(AuthContext);
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => {
+  if (user)
+    {setSidebar(!sidebar)}
+  };
 
   return (
     <>
@@ -52,7 +58,7 @@ export default function NavBar() {
       <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
         <ul className="nav-menu-items" >
           <li className="navbar-toggle" >
-            <Link href="#" className="menu-bars">
+            <Link href="/" className="menu-bars">
               <a >
                 <AiIcons.AiOutlineClose onClick={showSidebar} />
               </a>

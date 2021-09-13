@@ -45,36 +45,43 @@ const SubMenu = ({ item }) => {
 
   const showSubnav = () => setSubnav(!subnav);
 
+  // console.log(subnav);
+
   return (
     <>
-      <SidebarLink href={item.path} onClick={item.subNav && showSubnav}>
-          <a>
-        <div>
-          {item.icon}
-          <SidebarLabel>{item.title}</SidebarLabel>
-        </div>
-        <div>
-          {item.subNav && subnav
-            ? item.iconOpened
-            : item.subNav
-            ? item.iconClosed
-            : null}
-        </div>
+      <SidebarLink href={item.path} >
+        {/* onClick={ item.subNav && showSubnav} */}
+        <a onClick={item.subNav && showSubnav}>
+          <div>
+            {/* <br /> */}
+            {item.icon}
+            <SidebarLabel>{item.title}</SidebarLabel>
+          </div>
+          <div>
+            {item.subNav && subnav
+              ? item.iconOpened
+              : item.subNav
+                ? item.iconClosed
+                : null}
+          </div>
         </a>
+
       </SidebarLink>
       {subnav &&
         item.subNav.map((item, index) => {
           return (
             <DropdownLink href={item.path} key={index}>
-                <a>
-              {item.icon} 
-              <SidebarLabel>{item.title}</SidebarLabel>
-              </a>
+                  <a>
+                    {item.icon}
+                    <SidebarLabel>{item.title}</SidebarLabel>               
+                </a>
             </DropdownLink>
+
           );
         })}
     </>
   );
 };
+
 
 export default SubMenu;

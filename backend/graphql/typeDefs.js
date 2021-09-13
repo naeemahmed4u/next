@@ -28,6 +28,12 @@ module.exports = gql`
     category:String
     location:String
     department:String
+    depreciableAsset:String
+    depreciableCost:String
+    assetLife:String
+    salvageValue:String
+    depreciationMethod:String
+    dateAquired:String
 
   }
 
@@ -94,8 +100,27 @@ module.exports = gql`
     category:String
     location:String
     department:String
+    depreciableAsset:String
+    depreciableCost:String
+    assetLife:String
+    salvageValue:String
+    depreciationMethod:String
+    dateAquired:String
   }
 
+  type User {
+    id: ID!
+    email: String!
+    token: String!
+    username: String!
+    createdAt: String!
+  }
+  input RegisterInput {
+    username: String!
+    password: String!
+    confirmPassword: String!
+    email: String!
+  }
   type Query {
     files: [File!]
 
@@ -124,5 +149,7 @@ module.exports = gql`
     addDepartment(departmentInput:DepartmentInput!):Department!
     addAsset(assetInput: AssetInput): Asset
     uploadFile(file: Upload!): File!
+    register(registerInput: RegisterInput): User!
+    login(username: String!, password: String!): User!
   }
 `;

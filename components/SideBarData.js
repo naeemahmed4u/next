@@ -15,22 +15,24 @@ export const SideBarData=[
     cName: 'nav-text'
 },
 {
-    title: 'Login',
-    path: '/login',
+    title: 'Asset',
+    path: '/',
     icon: <AiIcons.AiOutlineLogin/>,
     cName: 'nav-text',
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
     subNav: [
         {
-          title: 'Message 1',
-          path: '/messages/message1',
-          icon: <IoIcons.IoIosPaper />
+          title: 'Add Asset',
+          path: '/AddAsset',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
         },
         {
-          title: 'Message 2',
-          path: '/messages/message2',
-          icon: <IoIcons.IoIosPaper />
+          title: 'List of Asset',
+          path: '/GetAsset',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
         }
       ]
 },
@@ -51,12 +53,14 @@ export const SideBarData=[
         {
             title: 'Users',
             path: '/Reports/Users',            
-            icon:<IoIcons.IoIosPaper/>
+            icon:<IoIcons.IoIosPaper/>,
+            cName: 'sub-nav'
         },
         {
             title: 'Revenue',
             path: '/Reports/Revenue',            
-            icon:<IoIcons.IoIosPaper/>
+            icon:<IoIcons.IoIosPaper/>,
+            cName: 'sub-nav'
         }    
     ]
 },

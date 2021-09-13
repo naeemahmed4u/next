@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from 'next/image'
 
 
-
+// const imagePath = require('../backend/public/images.jpg');
+const serverBaseURI = 'http://localhost:5000' 
 export const COLUMNS = [
     {
 
@@ -11,10 +12,14 @@ export const COLUMNS = [
         accessor: 'picture',
         Cell: ({ cell: { value }}) => (
             <div>
-              <Image
+              {/* <Image
                 src="https://blog.ispionage.com/wp-content/uploads/2013/11/Link-Building-Tool-Pic.jpg" alt={value} width={50} height={50}
-              />
+              /> */}
+              {/* <img src={`${serverBaseURI}./images/images.jpg`} alt="hello"/> */}
+              {/* <img src='./images.jpg'/> */}
+              <Image src={`${serverBaseURI}/images/${value}`} alt={value} width={50} height={50}/>
             </div>
+            // ${'picture'}
           )
     },
     {
@@ -62,13 +67,14 @@ export const COLUMNS = [
         Header: 'Actions',
         accessor: 'action',
         Cell: cell => (
-            <Link href="/AddAsset">
+            <Link href="/AddAsset"> 
                 <a>
                     <button value={cell.accessor}>
-                        {cell.accessor}
+                        View
                     </button>
                 </a>
             </Link>),
+            // href="/AddAsset"
     },
 
 ]

@@ -1,119 +1,102 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import Link from "next/link";
+import React, { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Field, Formik, Form, useFormikContext } from "formik";
 import { TextField } from "../components/TextField";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import * as Yup from "yup";
 import gql from "graphql-tag";
-import DatePicker from "../components/DatePicker";
-import styles from '../styles/Home.module.scss'
-import { Upload } from './Upload';
-import Site from '../components/Site';
-import Location from '../components/Location';
-import Department from '../components/Department';
-import Category from '../components/Category';
+import DatePicker1 from "../components/DatePicker";
+import styles from "../styles/Home.module.scss";
+import Site from "../components/Site";
+import Location from "../components/Location";
+import Department from "../components/Department";
+import Category from "../components/Category";
 
-import Dropzone, { HANDLE_UPLOAD } from '../components/Dropzone';
-import { filesQuery } from './Files';
+import Dropzone from "../components/Dropzone";
+
 import QRCode from "qrcode";
 
 import Modal from "../components/Modal";
 
-
 //import QrReader from 'react-qr-reader';
-const QrReader = dynamic(() => import('react-qr-reader'), { ssr: false })
+const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 //  import {Form, DropZone} from 'react-formik-ui';
 
-
-
 export default function AddAsset(props) {
-
-    const handleUpload = useContext(HANDLE_UPLOAD);
-    
-
+  // const fileContext = React.useContext(HANDLE_UPLOAD);
+  // console.log(fileContext);
+  //Main Mutation of this form
   const [addAsset] = useMutation(ADD_ASSET);
-  const { data: { getSites = [] } = {} , refetch: refetchSite } = useQuery(GET_SITES_QUERY);
-  const { data: { getCategorys = [] } = {}, refetch: refetchCategory } = useQuery(GET_CATEGORYS_QUERY);
-  const { data: { getLocations = [] } = {}, refetch: refetchLocation } = useQuery(GET_LOCATIONS_QUERY);
-  const { data: { getDepartments = [] } = {},  refetch:refetchDepartment } = useQuery(GET_DEPARTMENTS_QUERY);
-
-  // const [mutate, { loading, error }] = useMutation(uploadFileMutation);
-  // setFieldValue ((val) => {val.setFieldValue("picture", val)});
-  // const {file} = mutate;
-  // function setFieldValue(){
-
-  // }  
-
-
+  // Queries for dropdown
+  const { data: { getSites = [] } = {}, refetch: refetchSite } =
+    useQuery(GET_SITES_QUERY);
+  const { data: { getCategorys = [] } = {}, refetch: refetchCategory } =
+    useQuery(GET_CATEGORYS_QUERY);
+  const { data: { getLocations = [] } = {}, refetch: refetchLocation } =
+    useQuery(GET_LOCATIONS_QUERY);
+  const { data: { getDepartments = [] } = {}, refetch: refetchDepartment } =
+    useQuery(GET_DEPARTMENTS_QUERY);
 
   // const formikProps = useFormikContext();
-  const [text, setText] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [scanResultFile, setScanResultFile] = useState('');
-  const [scanResultWebCam, setScanResultWebCam] = useState('');
-  const [filePath, setFilePath] = useState('');
-
+  const [text, setText] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [scanResultFile, setScanResultFile] = useState("");
+  const [scanResultWebCam, setScanResultWebCam] = useState("");
+  const [filePath, setFilePath] = useState("");
+  
 
   // for Modal Form
   const [showSite, setShowSite] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [showLocation, setShowLocation] = useState(false);
   const [showDepartment, setShowDepartment] = useState(false);
-  // for Modal Form
-
+  // for Modal Form end
 
   const qrRef = useRef(null);
 
-  // const filePath = () => {
-  //   formikProps.setFieldValue("picture", path)
-  // }
   useEffect(() => {
     // refetch();
-    
   }, []);
 
+  
   const updateFilePath = (filePath) => {
     setFilePath(filePath);
+    // setFilePath(fileContext.path);
+    //console.log(fileContext.path);
     console.log(filePath);
-    // console.log(filePath);
-  }
-
+  };
 
   const generateQrCode = async () => {
-
     try {
       const response = await QRCode.toDataURL(text);
       setImageUrl(response);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleErrorFile = (error) => {
     console.log(error);
-  }
+  };
 
   const handleScanFile = (result) => {
     if (result) {
-      setScanResultFile = (result);
+      setScanResultFile = result;
     }
-  }
+  };
 
   const onScanFile = () => {
     qrRef.current.openImageDialog();
-  }
+  };
 
   const handleErrorWebCam = (error) => {
     console.log(error);
-  }
+  };
   const handleScanWebCam = (result) => {
     if (result) {
       setScanResultWebCam(result);
     }
-  }
-
+  };
 
   return (
     <>
@@ -132,6 +115,12 @@ export default function AddAsset(props) {
           category: "",
           location: "",
           department: "",
+          depreciableAsset: "Yes",
+          depreciableCost: "",
+          assetLife: "",
+          salvageValue: "",
+          depreciationMethod: "",
+          dateAquired: new Date().toDateString()
         }}
         validationSchema={Yup.object({
           picture: Yup.string(),
@@ -139,8 +128,8 @@ export default function AddAsset(props) {
             .max(15, "Must be 15 charaters or less")
             .required("Required"),
           assetTagID: Yup.string()
-          .max(20, "Must be 20 charaters or less")
-          .required("Required"),
+            .max(20, "Must be 20 charaters or less")
+            .required("Required"),
           purchasedFrom: Yup.string()
             .max(20, "Must be 20 charaters or less")
             .required("Required"),
@@ -172,15 +161,34 @@ export default function AddAsset(props) {
           //   .max(20, "Must be 20 charaters or less")
           //   .required("Required"),
         })}
-
-
-        onSubmit={(values) => {
-          const { picture, description, assetTagID, purchasedFrom, purchaseDate, brand, cost, model, serialNo, site, category, location, department } = values;
+        onSubmit={(values, { resetForm }) => {
+          const {
+            picture,
+            description,
+            assetTagID,
+            purchasedFrom,
+            purchaseDate,
+            brand,
+            cost,
+            model,
+            serialNo,
+            site,
+            category,
+            location,
+            department,
+            depreciableAsset,
+            depreciableCost,
+            assetLife,
+            salvageValue,
+            depreciationMethod,
+            dateAquired,
+          } = values;
 
           // picture = filePath;
-          // filePath();           
+          // filePath();
           // const {file} = picture;
           // console.log(picture);
+    // depcreciableCost:String,
 
           addAsset({
             variables: {
@@ -196,32 +204,24 @@ export default function AddAsset(props) {
               site,
               category,
               location,
-              department
+              department,
+              depreciableAsset,
+              depreciableCost,
+              assetLife,
+              salvageValue,
+              depreciationMethod,
+              dateAquired,
             },
           });
-          // ([file]) => {
-          // mutate({ variables: { file } });
-          // console.log(file);
-          // };
-          // useCallback(
-          //         ([file]) => {
-          //           mutate({ variables: { file } });
-          //         },
-          //         [mutate],
-          //       );
 
           console.log(values);
-          // console.log(path);
-
+          // resetForm({ values: "" });
         }}
       >
-        {(formik, setFieldValue,) => (
+        {(formik) => (
           <Form className={styles.card}>
             <h3>Add Asset</h3>
             {/* <TextField label="Picture" name="picture" type="text" placeholder="Path" value={filePath}  /> */}
-
-
-
             <TextField
               label="Description"
               name="description"
@@ -229,8 +229,13 @@ export default function AddAsset(props) {
               placeholder="Enter Asset Description..."
             />
             <TextField label="Asset Tag ID" name="assetTagID" type="text" />
-            <TextField label="Purchased From" name="purchasedFrom" type="text" />
-            <DatePicker label="Purchase Date" name="purchaseDate" />
+            <TextField
+              label="Purchased From"
+              name="purchasedFrom"
+              type="text"
+            />
+            <DatePicker1 label="Purchase Date" name="purchaseDate" />
+            {/* myValue={updateDate} value={newDate} */}
             <TextField label="Brand" name="brand" type="text" />
             <TextField label="Cost" name="cost" type="text" />
             <TextField label="Model" name="model" type="text" />
@@ -240,84 +245,153 @@ export default function AddAsset(props) {
             <label>Site</label>
             <Field as="select" name="site">
               <option value="Select Site">Select Site</option>
-              {getSites.map(index =>
-                <option key={index.id} value={index.site}>{index.site}</option>
-              )}
+              {getSites.map((index) => (
+                <option key={index.id} value={index.site}>
+                  {index.site}
+                </option>
+              ))}
             </Field>
-            <button onClick={() => setShowSite(true)}>+New</button>
-            <Modal onClose={() => {setShowSite(false),refetchSite()}} show={showSite}>
+            <button type="button" onClick={() => setShowSite(true)}>
+              +New
+            </button>
+            <Modal
+              onClose={() => {
+                setShowSite(false), refetchSite();
+              }}
+              show={showSite}
+            >
               <Site />
             </Modal>
-
-             <label>Category</label><Field as="select" name="category" >
+            <label>Category</label>
+            <Field as="select" name="category">
               <option value="Select Category">Select Category</option>
-              {getCategorys.map(i =>
-                <option key={i.id} value={i.category}>{i.category}</option>
-              )}
+              {getCategorys.map((i) => (
+                <option key={i.id} value={i.category}>
+                  {i.category}
+                </option>
+              ))}
             </Field>
-            <button onClick={() => setShowCategory(true)}>+New</button>
-            <Modal onClose={() => {setShowCategory(false),refetchCategory()}} show={showCategory}>
-              <Category onClose={() => {setShowCategory(false)}}/>
-            </Modal> <br /> <br />
+            <button type="button" onClick={() => setShowCategory(true)}>
+              +New
+            </button>
+            <Modal
+              onClose={() => {
+                setShowCategory(false), refetchCategory();
+              }}
+              show={showCategory}
+            >
+              <Category
+                onClose={() => {
+                  setShowCategory(false);
+                }}
+              />
+            </Modal>{" "}
+            <br /> <br />
             <label>Location</label>
-            <Field as="select" name="location" >
+            <Field as="select" name="location">
               <option value="Select Location">Select Location</option>
-              {getLocations.map(i =>
-                <option key={i.id} value={i.location}>{i.location}</option>
-              )}
+              {getLocations.map((i) => (
+                <option key={i.id} value={i.location}>
+                  {i.location}
+                </option>
+              ))}
             </Field>
-            <button onClick={() => setShowLocation(true)}>+New</button>
-            <Modal onClose={() => {setShowLocation(false),refetchLocation()} } show={showLocation}>
-              <Location />   
+            <button type="button" onClick={() => setShowLocation(true)}>
+              +New
+            </button>
+            <Modal
+              onClose={() => {
+                setShowLocation(false), refetchLocation();
+              }}
+              show={showLocation}
+            >
+              <Location />
             </Modal>
             <label>Department</label>
-            <Field as="select" name="department" >
+            <Field as="select" name="department">
               <option value="Select Department">Select Department</option>
-              {getDepartments.map(i =>
-                <option key={i.id} value={i.department}>{i.department}</option>
-              )}
+              {getDepartments.map((i) => (
+                <option key={i.id} value={i.department}>
+                  {i.department}
+                </option>
+              ))}
             </Field>
-            <button onClick={() => setShowDepartment(true)}>+New</button>
-            <Modal onClose={() => {setShowDepartment(false) , refetchDepartment()} } show={showDepartment} >
+            <button type="button" onClick={() => setShowDepartment(true)}>
+              +New
+            </button>
+            <Modal
+              onClose={() => {
+                setShowDepartment(false), refetchDepartment();
+              }}
+              show={showDepartment}
+            >
               <Department />
             </Modal>
-            {/* <Upload name="picture" atb = {(event) =>formik.setFieldValue("picture", event.target.files[0].filename) }/> */}
-            {/* <input name="picture" type="file" onChange={(event)=>formik.setFieldValue("picture",event.target.files[0])}  /> */}
-
-
-            {/* <Dropzone name="picture" onChange = {(event) =>formik.setFieldValue("picture", event.target.files[0]) } /> */}
-
-
-
             {/* {console.log(localStorage.getItem('eee'), "ted")}  */}
-            {/* <Dropzone name="picture" props={(event) =>formik.setFieldValue("picture", event)}/>     */}
             <Dropzone name="picture" pathValue={updateFilePath} value={filePath} />
+            <hr />
+            <label>Depreciable Asset &nbsp; &nbsp;&nbsp;&nbsp; </label>
+            <label>
+              <Field name="depreciableAsset" type="radio" value="Yes" />
+              &nbsp; Yes&nbsp;&nbsp;&nbsp;
+            </label>
+            <label>
+              &nbsp;&nbsp;&nbsp;
+              <Field name="depreciableAsset" type="radio" value="No" />
+              &nbsp;No
+            </label>
+            <TextField
+              label="Depreciable Cost"
+              name="depreciableCost"
+              type="text"
+            />
+            <TextField
+              label="Asset Life (months)"
+              name="assetLife"
+              type="text"
+            />
+            <TextField label="Salvage Value" name="salvageValue" type="text" />
+            
+            
+            <Field name="depreciationMethod" as="select" >
+              <option value="Straight Line">Straight Line</option>
+              <option value="Declining Balance">Declining Balance</option>
+            </Field>
 
-            <button className="btn btn-dark mt-3" type="submit"  onClick={handleUpload}>
+            <DatePicker1 label="Date Aquired" name="dateAquired" />
+            
+            <button className="btn btn-dark mt-3" type="submit">
               Submit
             </button>
-            <button className="btn btn-danger mt-3 ml-3" type="reset" >
+            <button className="btn btn-danger mt-3 ml-3" type="reset">
               Cancel
             </button>
-          </Form>)}
+          </Form>
+        )}
       </Formik>
 
-
       <div>
-        <input type="text" label="QR Code" name="QRCode" onChange={(e) => setText(e.target.value)} />
+        <input
+          type="text"
+          label="QR Code"
+          name="QRCode"
+          onChange={(e) => setText(e.target.value)}
+        />
         <button className="btn btn-dark mt-3" onClick={() => generateQrCode()}>
           Generate QRCode
         </button>
-        {imageUrl ? (<a href={imageUrl} download>
-          <img src={imageUrl} alt="img" /></a>) : null}
+        {imageUrl ? (
+          <a href={imageUrl} download>
+            <img src={imageUrl} alt="img" />
+          </a>
+        ) : null}
 
+        <button onClick={onScanFile}>Scan QR Code</button>
 
-        <button onClick={onScanFile}>
-          Scan QR Code
-        </button>
-
-        <QrReader ref={qrRef} delay={300}
-          style={{ width: '10%' }}
+        <QrReader
+          ref={qrRef}
+          delay={300}
+          style={{ width: "10%" }}
           onError={handleErrorFile}
           onScan={handleScanFile}
           legacyMode
@@ -327,7 +401,7 @@ export default function AddAsset(props) {
         <h3>Qr Code Scan by Web Cam</h3>
         <QrReader
           delay={300}
-          style={{ width: '10%' }}
+          style={{ width: "10%" }}
           onError={handleErrorWebCam}
           onScan={handleScanWebCam}
         />
@@ -339,7 +413,7 @@ export default function AddAsset(props) {
 
 const ADD_ASSET = gql`
   mutation addAsset(
-    $picture:String
+    $picture: String
     $description: String!
     $assetTagID: String!
     $purchasedFrom: String!
@@ -348,14 +422,21 @@ const ADD_ASSET = gql`
     $cost: String!
     $model: String!
     $serialNo: String!
-    $site:String
-    $category:String
-    $location:String
-    $department:String
+    $site: String
+    $category: String
+    $location: String
+    $department: String
+    $depreciableAsset:String
+    $depreciableCost:String
+    $assetLife:String
+    $salvageValue:String
+   $depreciationMethod:String
+    $dateAquired:String
+    
   ) {
     addAsset(
       assetInput: {
-        picture:$picture
+        picture: $picture
         description: $description
         assetTagID: $assetTagID
         purchasedFrom: $purchasedFrom
@@ -364,10 +445,16 @@ const ADD_ASSET = gql`
         cost: $cost
         model: $model
         serialNo: $serialNo
-        site:$site
-        category:$category
-        location:$location
-        department:$department
+        site: $site
+        category: $category
+        location: $location
+        department: $department
+        depreciableAsset:$depreciableAsset
+        depreciableCost:$depreciableCost
+        assetLife:$assetLife
+        salvageValue:$salvageValue
+        depreciationMethod:$depreciationMethod
+        dateAquired:$dateAquired
       }
     ) {
       id
@@ -384,50 +471,57 @@ const ADD_ASSET = gql`
       category
       location
       department
+      depreciableAsset
+      depreciableCost
+      assetLife
+      salvageValue
+      depreciationMethod
+      dateAquired
+      
     }
   }
 `;
 
-const uploadFileMutation = gql`
-  mutation UploadFile($file: Upload!) {
-    uploadFile(file: $file){
-      filename
-    }
-  }
-`;
+// const uploadFileMutation = gql`
+//   mutation UploadFile($file: Upload!) {
+//     uploadFile(file: $file){
+//       filename
+//     }
+//   }
+// `;
 
 const GET_SITES_QUERY = gql`
- {
+  {
     getSites {
       id
-     site    
+      site
     }
   }
 `;
 
 const GET_CATEGORYS_QUERY = gql`
- {
+  {
     getCategorys {
       id
-     category    
+      category
     }
   }
 `;
 
 const GET_LOCATIONS_QUERY = gql`
- {
+  {
     getLocations {
       id
-     location    
+      location
     }
   }
 `;
 
 const GET_DEPARTMENTS_QUERY = gql`
- {
+  {
     getDepartments {
       id
-     department    
+      department
     }
   }
 `;
